@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="countyApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        body{
+            font: 100 1em Avenir;
+
+        }
+        div.state{
+            margin: 1em;
+
+            padding: 0.5em;
+        }
+        div.state:hover{
+            background-color: #ccc;
+            cursor: pointer;
+        }
+
+    </style>
+    <script src="js/data.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+
+    <title>XHR Settings</title>
+    <script>
+        var countyApp = angular.module('countyApp', []);
+
+        countyApp.controller('CountyCtrl', function($scope, $http){
+            $scope.states = data;
+
+            $scope.getWeather = function (state){
+                $http.get('http://api.openweathermap.org/data/2.5/weather?lat=' + state.primary_latitude + '&lon=' + state.primary_longitude).success(function(data){
+                    state.weather= {
+                        description: data.weather[0].description,
+                        imgurl: 'http://openweathermap.org/img/w/' + data.weather[0].icon + '.png'
+                    };
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div ng-controller="CountyCtrl">
+        <div class="state" ng-repeat="state in states | orderBy:'name'">
+            {{state.name}}
+            <a href="javascript:void(0);" ng-click="getWeather(state)">Get Weather Info</a>
+            <span ng-bind="state.weather.description"></span>
+            <img ng-src="{{state.weather.imgurl}}" alt=""/>
+            <a href=""></a>
+        </div>
+    </div>
+
+</body>
+</html>

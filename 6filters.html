@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="countyApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        body{
+            font: 100 1em Avenir;
+
+        }
+        div.state{
+            margin: 1em;
+
+            padding: 0.5em;
+        }
+        div.state:hover{
+            background-color: #ccc;
+            cursor: pointer;
+        }
+        span.prop{
+            background-color: #ccc;
+            font: 100 0.85em Avenir;
+            display: inline-block;
+            padding: 0.3em 0.5em;
+        }
+        span.prop_value{
+            font: 100 1em Avenir;
+            padding: 0.3em 0.5em;
+        }
+        div.county{
+            padding: 0.22em;
+        }
+
+    </style>
+    <title>Route Controller</title>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script>
+        // filters.js
+        countyApp.filter('prefixcd', function(){
+            return function(input){
+                return 'FIPS_CD_' + input;
+            };
+        });
+
+    </script>
+    <script>
+        // Script to deal with the App Module
+        var countyApp = angular.module('countyApp', ['ngRoute', 'countyControllers', 'countyFilters']);
+        countyApp.config(['$routeProvider', function($routeProvider){
+            $routeProvider.when('/angular/counties', {
+                templateUrl: '/angular/partials/county-list.html',
+                controller: 'CountyListCtrl'
+            }).when('/angular/counties/:id', {
+                templateUrl: '/angular/partials/county-detail.html',
+                controller: 'CountyDetailCtrl'
+            }).otherwise({
+                redirectTo:'/angular/counties'
+            });
+        }]);
+    </script>
+    <script>
+        // controllers for the partial views
+        var countyControllers = angular.module('countyControllers', []);
+        countyControllers.controller('CountyListCtrl', ['$scope', '$http', function($scope, $http){
+            $http.get('http://localhost:3000/ca.json').success(function(data){
+                $scope.counties = data.data;
+            });
+        }]);
+        countyControllers.controller('CountyDetailCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams){
+            $http.get('http://localhost:3000/ca.json').success(function(data){
+                $scope.counties = data.data;
+                $scope.county = $scope.counties[$routeParams.id];
+                console.log($scope.county);
+            });
+        }]);
+    </script>
+</head>
+<body>
+
+<div ng-view></div>
+
+</body>
+</html>

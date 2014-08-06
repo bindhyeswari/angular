@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="weatherApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bower_components/open-sans-fontface/open-sans.css"/>
+    <link rel="stylesheet" href="css/generic.css"/>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        var myApp = angular.module('weatherApp', []);
+        myApp.directive('weatherDirective', function(){
+            var ddo = {
+                templateUrl: '',
+                restrict: 'A'
+            };
+            return ddo;
+        });
+        myApp.controller('WeatherCtrl', function($scope){
+            $scope.message = 'Hello World!';
+        });
+    </script>
+</head>
+<body>
+    <div ng-controller="WeatherCtrl">
+        {{message}}
+    </div>
+</body>
+</html>

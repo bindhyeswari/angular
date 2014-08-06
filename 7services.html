@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="countyApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        body{
+            font: 100 1em Avenir;
+        }
+        div.state{
+            margin: 1em;
+
+            padding: 0.5em;
+        }
+        div.state:hover{
+            background-color: #ccc;
+            cursor: pointer;
+        }
+        span.prop{
+            background-color: #ccc;
+            font: 100 0.85em Avenir;
+            display: inline-block;
+            padding: 0.3em 0.5em;
+        }
+        span.prop_value{
+            font: 100 1em Avenir;
+            padding: 0.3em 0.5em;
+        }
+        div.county{
+            padding: 0.22em;
+        }
+
+    </style>
+    <title>Route Controller</title>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script>
+        // filters.js
+        angular.module('countyFilters', []).filter('prefixcd', function(){
+            return function(input){
+                return 'FIPS_CD_' + input;
+            };
+        });
+
+    </script>
+    <script>
+        var countyAppServices = angular.module('countyAppServices', ['ngResource']);
+        countyAppServices.factory('State', ['$resource', function($resource){
+            return $resource('http://localhost:3000/:state.json', {}, {
+                query: {method:'GET', params:{state:'ca'}, isArray:false}
+            });
+        }]);
+    </script>
+    <script>
+        // Script to deal with the App Module
+        // Changed this ...
+        var countyApp = angular.module('countyApp', ['ngRoute', 'countyControllers', 'countyFilters', 'countyAppServices']);
+        countyApp.config(['$routeProvider', function($routeProvider){
+            $routeProvider.when('/angular/counties', {
+                templateUrl: '/angular/partials/county-list.html',
+                controller: 'CountyListCtrl'
+            }).when('/angular/counties/:id', {
+                templateUrl: '/angular/partials/county-detail.html',
+                controller: 'CountyDetailCtrl'
+            }).otherwise({
+                redirectTo:'/angular/counties'
+            });
+        }]);
+    </script>
+    <script>
+        // controllers for the partial views
+
+        var countyControllers = angular.module('countyControllers', []);
+        // Changed this ...
+        countyControllers.controller('CountyListCtrl', ['$scope', '$http', 'State', '$q', function($scope, $http, State, $q){
+            var delay = $q.defer();
+            State.get({state: 'ca'}, function(data){
+                $scope.counties = data.data;
+            });
+        }]);
+        countyControllers.controller('CountyDetailCtrl', ['$scope', '$http', '$routeParams', 'State', function($scope, $http, $routeParams, State){
+            $scope.counties = State.query();
+            $scope.county = $scope.counties[$routeParams.id];
+            console.log($scope.county);
+        }]);
+    </script>
+</head>
+<body>
+
+<div ng-view></div>
+
+</body>
+</html>

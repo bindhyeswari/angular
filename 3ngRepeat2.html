@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="statesApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        ul {
+            padding: 0.5em 2em;
+            font-family: Avenir;
+            color: #888;
+        }
+        li {
+            display: inline-block;
+            margin: 0 0.25em;
+            list-style-type: none;
+            padding: 0.5em;
+
+            cursor: default;
+        }
+        li > span:first-child {
+            display: inline-block;
+            padding: 0.3em 0.75em 0.2em 0.75em;
+            background-color: #ddd;
+        }
+        li > span:last-child {
+            color: #222;
+            display: inline-block;
+            padding: 0.3em 0.75em 0.2em 0.75em;
+            background-color: #eee;
+        }
+        li:hover > span:first-child{
+            color: #ddd;
+            background-color: #888;
+            -moz-transition: all 500ms ease;
+        }
+        li:hover > span:last-child{
+            color: #eee;
+            background-color: #222;
+            -moz-transition: all 500ms ease;
+        }
+        ul > li:first-child {
+            display: block;
+        }
+        input  {
+             padding: 0.25em 0.5em;
+             font: 100 0.9em Avenir;
+             border: 1px solid gray;
+             margin: 3em 4em 0 3em;
+        }
+        select {
+            font: 100 0.85em Avenir;
+            padding: 0.25em;
+            background-color: transparent;
+            border: 1px solid #BBB;
+        }
+        .test{
+            color: red;
+        }
+    </style>
+    <script src="bower_components/angular/angular.js"></script>
+    <title>The ng-repeat directive</title>
+    <script>
+        var statesApp = angular.module('statesApp', []);
+        statesApp.controller('StateListControl', function($scope){
+            $scope.states = [{"state":"ALABAMA","code":"AL"},{"state":"ALASKA","code":"AK"},{"state":"AMERICAN SAMOA","code":"AS"},{"state":"ARIZONA","code":"AZ"},{"state":"ARKANSAS","code":"AR"},{"state":"CALIFORNIA","code":"CA"},{"state":"COLORADO","code":"CO"},{"state":"CONNECTICUT","code":"CT"},{"state":"DELAWARE","code":"DE"},{"state":"DISTRICT OF COLUMBIA","code":"DC"},{"state":"FEDERATED STATES OF MICRONESIA","code":"FM"},{"state":"FLORIDA","code":"FL"},{"state":"GEORGIA","code":"GA"},{"state":"GUAM GU","code":"GU"},{"state":"HAWAII","code":"HI"},{"state":"IDAHO","code":"ID"},{"state":"ILLINOIS","code":"IL"},{"state":"INDIANA","code":"IN"},{"state":"IOWA","code":"IA"},{"state":"KANSAS","code":"KS"},{"state":"KENTUCKY","code":"KY"},{"state":"LOUISIANA","code":"LA"},{"state":"MAINE","code":"ME"},{"state":"MARSHALL ISLANDS","code":"MH"},{"state":"MARYLAND","code":"MD"},{"state":"MASSACHUSETTS","code":"MA"},{"state":"MICHIGAN","code":"MI"},{"state":"MINNESOTA","code":"MN"},{"state":"MISSISSIPPI","code":"MS"},{"state":"MISSOURI","code":"MO"},{"state":"MONTANA","code":"MT"},{"state":"NEBRASKA","code":"NE"},{"state":"NEVADA","code":"NV"},{"state":"NEW HAMPSHIRE","code":"NH"},{"state":"NEW JERSEY","code":"NJ"},{"state":"NEW MEXICO","code":"NM"},{"state":"NEW YORK","code":"NY"},{"state":"NORTH CAROLINA","code":"NC"},{"state":"NORTH DAKOTA","code":"ND"},{"state":"NORTHERN MARIANA ISLANDS","code":"MP"},{"state":"OHIO","code":"OH"},{"state":"OKLAHOMA","code":"OK"},{"state":"OREGON","code":"OR"},{"state":"PALAU","code":"PW"},{"state":"PENNSYLVANIA","code":"PA"},{"state":"PUERTO RICO","code":"PR"},{"state":"RHODE ISLAND","code":"RI"},{"state":"SOUTH CAROLINA","code":"SC"},{"state":"SOUTH DAKOTA","code":"SD"},{"state":"TENNESSEE","code":"TN"},{"state":"TEXAS","code":"TX"},{"state":"UTAH","code":"UT"},{"state":"VERMONT","code":"VT"},{"state":"VIRGIN ISLANDS","code":"VI"},{"state":"VIRGINIA","code":"VA"},{"state":"WASHINGTON","code":"WA"},{"state":"WEST VIRGINIA","code":"WV"},{"state":"WISCONSIN","code":"WI"},{"state":"WYOMING","code":"WY"}];
+        });
+    </script>
+</head>
+<body>
+<input class="test" type="text" ng-model="query" placeholder="statename or code ..."/>
+<select name="order" id="order" ng-model="orderProp">
+    <option value="state">State Name</option>
+    <option value="code">State Code</option>
+</select>
+<ul ng-controller="StateListControl">
+    <li></li>
+    <li ng-repeat="state in states | orderBy:orderProp | filter:query ">
+        <span>{{state.state}}</span>
+        <span>{{state.code}}</span>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="countyApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/data.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script>
+
+        var countyApp = angular.module('countyApp', ['ngRoute']);
+
+        countyApp.controller('CountyListControl', function($scope){
+            $scope.counties = data;
+            console.log($scope);
+        });
+
+        countyApp.controller('CountyDetailControl', function($scope, $routeParams){
+            $scope.county = data[($routeParams.id)];
+        });
+
+        countyApp.config(['$routeProvider', function($routeProvider){
+            $routeProvider.when('/angular/county/list', {
+                templateUrl: '/angular/partials/list.html',
+                controller: 'CountyListControl'
+            }).when('/angular/county/details/:id', {
+                templateUrl: '/angular/partials/detail.html',
+                controller: 'CountyDetailControl'
+            }).otherwise({
+                redirectTo: '/angular/county/list'
+            });
+        }]);
+
+        countyApp.filter('upper', function(){
+            return function(inp){
+                inp.toString().toUpperCase();
+            };
+        });
+    </script>
+</head>
+<body>
+    <div ng-view></div>
+
+
+</body>
+</html>

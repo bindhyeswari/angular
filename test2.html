@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en" ng-app="countyApp">
+<head>
+    <style>
+        ul {
+            padding: 0.5em 2em;
+            font-family: Avenir;
+            color: #888;
+        }
+        li {
+            display: inline-block;
+            margin: 0.5em;
+            list-style-type: none;
+            padding: 0.5em;
+            border: 1px solid gray;
+            cursor: pointer;
+
+        }
+        li > span:first-child {
+            display: inline-block;
+            padding: 0.3em 0.75em 0.2em 0.75em;
+            background-color: #ddd;
+        }
+        li > span:last-child {
+            color: #222;
+            display: inline-block;
+            padding: 0.3em 0.75em 0.2em 0.75em;
+            background-color: #eee;
+        }
+        li:hover > span:first-child{
+            color: #ddd;
+            background-color: #888;
+            -moz-transition: all 500ms ease;
+        }
+        li:hover > span:last-child{
+            color: #eee;
+            background-color: #222;
+            -moz-transition: all 500ms ease;
+        }
+    </style>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>ax</title>
+    <script src="js/data.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        var countyApp = angular.module('countyApp', []);
+
+        countyApp.controller('CountyAppController', function($scope, $http){
+
+            $scope.counties = data;
+            $scope.getWeather = function(county){
+                var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + county.primary_latitude + '&lon=' +
+                        county.primary_longitude;
+                console.log(url);
+                $http.get(url).success(function(data){
+                    county.weather = data.weather[0].description;
+                    console.log(data.weather[0].description);
+                });
+            };
+        });
+
+    </script>
+</head>
+<body>
+<ul ng-controller="CountyAppController">
+    <li ng-repeat="county in counties" ng-click="getWeather(county)">
+        <span>{{county.name}}</span>
+        <span>{{county.primary_latitude}}</span>
+        <span ng-bind="county.weather"></span>
+        <span>{{county.primary_longitude}}</span>
+
+    </li>
+</ul>
+</body>
+</html>

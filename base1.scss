@@ -1,0 +1,7 @@
+$font: 200 1em 'Helvetica Neue';
+$color: rgba(200, 19, 17, 0.80);
+
+button {
+  border: 1px solid darken($color, 80%);
+  background-color: light;
+}
