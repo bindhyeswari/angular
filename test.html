@@ -4,34 +4,46 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="base1.css"/>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <style>
-        body {
-            padding: 3em;
-            font: 200 1em 'Helvetica Neue';
-        }
-
-        body > div {
-            width: 70%;
-            margin: 0 auto;
-            border: 1px solid #aaa;
-            text-align: center;
-        }
-
-        div > div {
-            margin: 1em;
-            padding: 1em;
-            height: 5em;
-            width: 5em;
-            border: 1px solid #bbb;
-            display: inline-block;
-        }
     </style>
+    <script>
+
+        $(function(){
+            var element = $('#results').html();
+            console.log(Object.prototype.toString.call(element[0]));
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var inpFiles = document.body.firstElementChild;
+            var result = document.body.lastElementChild;
+
+            inpFiles.addEventListener('change', function () {
+                var fileListObject = inpFiles.files;
+                console.log(fileListObject);
+
+                for (var i = 0, len = fileListObject.length; i < len; i++) {
+                    var file = fileListObject[i];
+
+                    var reader = new FileReader();
+
+                    reader.addEventListener('loadend', function () {
+                        console.log(this.result);
+                    });
+
+                    reader.readAsDataURL(file);
+
+                }
+
+            });
+
+        });
+    </script>
 </head>
 <body>
-    <div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <input type="file" multiple/>
+    <div id="results">
+
     </div>
 </body>
 </html>

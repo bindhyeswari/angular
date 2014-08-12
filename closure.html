@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+
+
+        Array.prototype.myreduce = function (fn) {
+            var reduced = fn(this[0], this[1]);
+            for (var i = 2, len = this.length; i < len; i++) {
+                reduced = fn(reduced, this[i]);
+            }
+            return reduced;
+        };
+        var data = [[1,2,3,4],2,3,4,[1,2,3]].myreduce(function (a, b){
+            console.log('a:' + a + ', b: ' + b);
+            return a.toString() + b.toString();
+
+        });
+        console.log(data);
+
+
+        var i = 0;
+        function createClosure(){
+            var i = 0;
+            return function (){
+                i++;
+                return i;
+            }
+        }
+
+        var closure = createClosure();
+        console.log('Value of closure()' + closure());
+        console.log('Value of i: ' + i);
+        i = 20;
+        console.log('Value of closure()' + closure());
+        console.log('Value of i: ' + i);
+        console.log('Value of closure()' + closure());
+        console.log('Value of i: ' + i);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

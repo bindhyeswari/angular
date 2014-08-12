@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="base.css"/>
+    <title></title>
+    <script src="bower_components/angular/angular.js"></script>
+    <style>
+        .inputFileImage {
+            height: 200px;
+        }
+    </style>
+    <script>
+        angular.module('myApp', [])
+        .directive('inputFile', function(){
+            // return a directive definition object ...
+            return {
+                restrict: 'A',
+                templateUrl: '/angular/dTemplate_inputfile.html',
+                link: function(scope, element, attrs){
+
+
+
+                    // Listen for changes in the input element
+                    var itf = element[0].firstElementChild;
+                    var resultsDiv = element[0].lastElementChild;
+
+                    // event handler for change event on the input type file
+                    itf.addEventListener('change', function(){
+                        // clear prior selections
+                       resultsDiv.innerHTML = '';
+
+                        // access the fileList object
+                       var fileListObject = this.files;
+                        scope.$apply(function(){
+                            scope.fileListObject = fileListObject;
+                        });
+                        // read all files and append them as images
+                       for (var i = 0, len = fileListObject.length; i < len; i++) {
+
+                           var fileReader = new FileReader();
+                           fileReader.addEventListener('loadend', function () {
+                                //console.log(this.result);
+
+                               resultsDiv.appendChild(createImage(this.result));
+
+                           });
+                           fileReader.readAsDataURL(fileListObject[i]);
+                       }
+                    });
+
+                    // * Function to create image from a data uri
+                    function createImage(datauri) {
+                        var img = document.createElement('img');
+                        img.src = datauri;
+                        img.className = 'inputFileImage';
+                        return img;
+                    }
+
+
+                }
+            }
+        })
+        .controller('MyCtrl', function ($scope) {
+            $scope.message = 'Hello World!';
+            $scope.fileListObject = [];
+            $scope.$watch('fileListObject', function(value){
+                console.log('The file list object was changed ... ' + value);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div ng-controller="MyCtrl">
+        {{message}}
+        <div input-file></div>
+    </div>
+</body>
+</html>
